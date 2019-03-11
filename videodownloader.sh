@@ -1,38 +1,45 @@
 #!/bin/bash
 # This script automatically downloads videos or audios from URLs
 # Dependencies: youtube-dl
-display_help () {
+$usage="./videodownloader.sh [OPTIONS] -f [FILE]
+./videodownloader.sh [-h] [-t n] -f [FILE]
+e.g. ./videodownloader.sh -t 18 -f dloadlinks.txt
 
-cat << EOF
-Usage: ./videodownloader.sh [OPTIONS] -f [FILE]...
 Takes URLs listed in a text file and automatically downloads corresponding videos or audios
 
 Mandatory arguments to long options are mandatory for short options too.
-
   -t	typically use -t 18 for mp4 video with sound or -t 249 for webm audio only
   -f	file containing the list of URLs to download video or audio
   -h	give this help
 
-Report bugs to <Olaitan I. Awe - laitanawe@gmail.com>.
-EOF
-
-}
+Report bugs to Olaitan I. Awe - laitanawe@gmail.com"
 
 # Specify default parameters if not supplied
 TYPEFORMAT=250
-
 counturl=0
 
-while getopts t:hf: option
+while getopts :ht:f: option
 do
 case "${option}"
 in
-t) TYPEFORMAT=${OPTARG};;
-f) FILE_DLOAD=$OPTARG;;
-h) display_help exit;;
-
-    esac
+   h) echo "$usage" 
+      exit
+      ;;
+   t) TYPEFORMAT=${OPTARG}
+      ;;
+   f) FILE_DLOAD=$OPTARG
+      ;;
+   :) printf "missing argument for -%s\n" "$OPTARG" >&2
+      echo "$usage" >&2
+      exit 1
+      ;;
+  \?) printf "illegal option: -%s\n" "$OPTARG" >&2
+      echo "$usage" >&2
+      exit 1
+      ;;
+  esac
 done
+shift $((OPTIND - 1))
 
 # Pick up all the resulting Run ID's and put it into an array
 run_ids_array=(`awk '{print $1}' ${FILE_DLOAD}`)
