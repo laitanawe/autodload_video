@@ -1,28 +1,51 @@
 #!/bin/bash
 # This script automatically downloads videos or audios from URLs
 # Dependencies: youtube-dl
-$usage="./videodownloader.sh [OPTIONS] -f [FILE]
-./videodownloader.sh [-h] [-t n] -f [FILE]
+
+display_help () {
+
+cat << EOF
+Usage: ./videodownloader.sh [OPTIONS] -f [URLFILE]...
+./videodownloader.sh [-h] [-t n] -f [URLFILE]
 e.g. ./videodownloader.sh -t 18 -f dloadlinks.txt
 
 Takes URLs listed in a text file and automatically downloads corresponding videos or audios
 
-Mandatory arguments to long options are mandatory for short options too.
-  -t	typically use -t 18 for mp4 video with sound or -t 249 for webm audio only
-  -f	file containing the list of URLs to download video or audio
-  -h	give this help
+Mandatory arguments include -f PATH_TO_URLFILE
+Where:
+  -t    typically use -t 18 for mp4 video with sound or -t 249 for webm audio only
+   n	this is the integer representing the video or audio format for youtube-dl
+  -f    file containing the list of URLs to download video or audio
+  -h    give this help
 
-Report bugs to Olaitan I. Awe - laitanawe@gmail.com"
+Report bugs to <Olaitan I. Awe - laitanawe@gmail.com>
+EOF
+
+}
+
+
+#$usage="./videodownloader.sh [OPTIONS] -f [FILE]
+#./videodownloader.sh [-h] [-t n] -f [FILE]
+#e.g. ./videodownloader.sh -t 18 -f dloadlinks.txt
+
+#Takes URLs listed in a text file and automatically downloads corresponding videos or audios
+
+#Mandatory arguments to long options are mandatory for short options too.
+#  -t	typically use -t 18 for mp4 video with sound or -t 249 for webm audio only
+#  -f	file containing the list of URLs to download video or audio
+#  -h	give this help
+
+#Report bugs to Olaitan I. Awe - laitanawe@gmail.com"
 
 # Specify default parameters if not supplied
 TYPEFORMAT=250
 counturl=0
 
-while getopts :ht:f: option
+while getopts t:hf: option
 do
 case "${option}"
 in
-   h) echo "$usage" 
+   h) display_help
       exit
       ;;
    t) TYPEFORMAT=${OPTARG}
